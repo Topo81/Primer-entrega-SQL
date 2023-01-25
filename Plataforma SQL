@@ -1,0 +1,57 @@
+create schema if not exists PLATAFORMA;	
+USE plataforma;
+
+create table medios_de_pago(
+Id_pago	decimal(12,0) 	Not null	primary key,
+Credito	decimal(16,0),
+Debito	decimal(16,0)
+);
+
+create table complementos(
+ID_compl	decimal(12,0)  	Not null 	primary key,
+Nombre_compl	Varchar(100)	Not null,
+Precio_Compl	decimal(7,2)	Not null	
+);
+
+create table juegos_pagos(
+Genero	Varchar(50)	Not null,	
+ID_JP	decimal(12,0)  Not null primary key,
+Titulo_JP	Varchar(50)	Not null	,
+Fecha_lanzamiento	date	Not null,	
+Plataforma	Varchar(30)	Not null	,
+Precio	decimal(7,2)	Not null	,
+Requisito_rec	Varchar(100) Not null,	
+Requisito_min	Varchar(100) Not null,	
+ID_compl	decimal(12,0) ,
+foreign key (ID_compl) references complementos(ID_compl)
+);
+
+create table juegos_gratis(
+ID_JG	decimal(12,0)	Not null 	primary key,
+Titulo_JG	Varchar(50)	Not null,	
+Fecha_lanzamiento_JG	date	Not null,	
+Plataforma_JG	Varchar(30)	Not null,	
+Requisito_recJG	Varchar(100)	Not null,	
+Requisito_minJG	Varchar(100)	Not null	
+);
+
+create table usuarios(
+Fecha_nac	date	Not null,
+e_mail	Varchar(100)	Not null,	
+Nombre_usuario	Varchar(30)	Not null,	
+ID_usuario	decimal(12,0)	Not null primary key,
+ID_JP	decimal(12,0),
+ID_JG	decimal(12,0),
+foreign key(ID_JP) references juegos_pagos(ID_JP),
+foreign key(ID_JG) references juegos_gratis(ID_JG)
+);
+
+create table compras(
+ID_compras	decimal(12,0)	Not null	primary key,
+ID_JP	decimal(12,0),
+ID_JG	decimal(12,0),
+Id_pago	decimal(16,0),
+foreign key (ID_JP) references juegos_pagos(ID_JP),
+foreign key (ID_JG) references juegos_gratis(ID_JG),
+foreign key (Id_pago) references medios_de_pago(Id_pago)
+)
