@@ -1,57 +1,64 @@
 create schema if not exists PLATAFORMA;	
 USE plataforma;
 
-create table medios_de_pago(
-Id_pago	decimal(12,0) 	Not null	primary key,
-Credito	decimal(16,0),
-Debito	decimal(16,0)
+-- Crear tabla MEDIOS_DE_PAGO
+CREATE TABLE MEDIOS_DE_PAGO (
+    Id_pago INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    Credito DECIMAL(16,0),
+    Debito DECIMAL(16,0)
 );
 
-create table complementos(
-ID_compl	decimal(12,0)  	Not null 	primary key,
-Nombre_compl	Varchar(100)	Not null,
-Precio_Compl	decimal(7,2)	Not null	
+-- Crear tabla COMPLEMENTOS
+CREATE TABLE COMPLEMENTOS (
+    ID_compl INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    Nombre_compl VARCHAR(100) NOT NULL,
+    Precio_Compl DECIMAL(7,2) NOT NULL
 );
 
-create table juegos_pagos(
-Genero	Varchar(50)	Not null,	
-ID_JP	decimal(12,0)  Not null primary key,
-Titulo_JP	Varchar(50)	Not null	,
-Fecha_lanzamiento	date	Not null,	
-Plataforma	Varchar(30)	Not null	,
-Precio	decimal(7,2)	Not null	,
-Requisito_rec	Varchar(100) Not null,	
-Requisito_min	Varchar(100) Not null,	
-ID_compl	decimal(12,0) ,
-foreign key (ID_compl) references complementos(ID_compl)
+-- Crear tabla JUEGOS_PAGOS
+CREATE TABLE JUEGOS_PAGOS (
+    Genero VARCHAR(50) NOT NULL,
+    ID_JP INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    Titulo_JP VARCHAR(50) NOT NULL,
+    Fecha_lanzamiento DATE NOT NULL,
+    Plataforma VARCHAR(30) NOT NULL,
+    Precio DECIMAL(7,2) NOT NULL,
+    Requisito_rec VARCHAR(100) NOT NULL,
+    Requisito_min VARCHAR(100) NOT NULL,
+    ID_compl INT,
+    FOREIGN KEY (ID_compl) REFERENCES COMPLEMENTOS(ID_compl)
 );
 
-create table juegos_gratis(
-ID_JG	decimal(12,0)	Not null 	primary key,
-Titulo_JG	Varchar(50)	Not null,	
-Fecha_lanzamiento_JG	date	Not null,	
-Plataforma_JG	Varchar(30)	Not null,	
-Requisito_recJG	Varchar(100)	Not null,	
-Requisito_minJG	Varchar(100)	Not null	
+-- Crear tabla JUEGOS_GRATIS
+CREATE TABLE JUEGOS_GRATIS (
+    ID_JG INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    Titulo_JG VARCHAR(50) NOT NULL,
+    Genero VARCHAR(50) NOT NULL,
+    Fecha_lanzamiento DATE NOT NULL,
+    Plataforma VARCHAR(30) NOT NULL,
+    Requisito_rec VARCHAR(100) NOT NULL,
+    Requisito_min VARCHAR(100) NOT NULL
 );
 
-create table usuarios(
-Fecha_nac	date	Not null,
-e_mail	Varchar(100)	Not null,	
-Nombre_usuario	Varchar(30)	Not null,	
-ID_usuario	decimal(12,0)	Not null primary key,
-ID_JP	decimal(12,0),
-ID_JG	decimal(12,0),
-foreign key(ID_JP) references juegos_pagos(ID_JP),
-foreign key(ID_JG) references juegos_gratis(ID_JG)
+-- Crear tabla USUARIOS
+CREATE TABLE USUARIOS (
+    Fecha_nac date NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    Nombre_usuario VARCHAR(30) NOT NULL,
+    ID_usuario INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    ID_JP INT,
+    ID_JG INT,
+    FOREIGN KEY (ID_JP) REFERENCES JUEGOS_PAGOS(ID_JP),
+    FOREIGN KEY (ID_JG) REFERENCES JUEGOS_GRATIS(ID_JG)
 );
 
-create table compras(
-ID_compras	decimal(12,0)	Not null	primary key,
-ID_JP	decimal(12,0),
-ID_JG	decimal(12,0),
-Id_pago	decimal(16,0),
-foreign key (ID_JP) references juegos_pagos(ID_JP),
-foreign key (ID_JG) references juegos_gratis(ID_JG),
-foreign key (Id_pago) references medios_de_pago(Id_pago)
-)
+-- Crear tabla Compras
+CREATE TABLE Compras (
+    ID_compras INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    ID_JP INT,
+    ID_JG INT,
+    ID_pago INT,
+    FOREIGN KEY (ID_JP) REFERENCES JUEGOS_PAGOS(ID_JP),
+    FOREIGN KEY (ID_JG) REFERENCES JUEGOS_GRATIS(ID_JG),
+    FOREIGN KEY (ID_pago) REFERENCES MEDIOS_DE_PAGO(Id_pago)
+);
